@@ -1,6 +1,17 @@
+import { useNavigate } from "react-router-dom";
 import Header from "./Header";
+import { useEffect } from "react";
 
 const SalesForm = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isToken = localStorage.getItem("token");
+    if (!isToken) {
+      navigate("/login");
+    }
+  }, []);
+
   return (
     <>
       <Header />

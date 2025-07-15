@@ -5,6 +5,8 @@ import PurchaseForm from "./components/PurchaseForm";
 import Aryan from "./components/Aryan";
 import Anshu from "./components/Anshu";
 import Ronak from "./components/Ronak";
+import Login from "./components/Login";
+import NewProduct from "./components/NewProduct";
 
 function App() {
   return (
@@ -33,6 +35,14 @@ function App() {
         <Route
           path="/ronak"
           element={<Ronak />}
+        />
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+        <Route
+          path="/newproduct"
+          element={<NewProduct />}
         />
       </Routes>
     </BrowserRouter>

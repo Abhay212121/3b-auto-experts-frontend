@@ -1,13 +1,24 @@
+import { useNavigate } from "react-router-dom";
 import Header from "./Header";
+import { useEffect } from "react";
 
 export const Home = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isToken = localStorage.getItem("token");
+    if (!isToken) {
+      navigate("/login");
+    }
+  }, []);
+
   return (
     <>
       <Header />
       <div className="md:px-20 my-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-[#EB1414] mb-2">
-            3B Auto Experts
+            3B AutoXperts
           </h1>
           <p className="text-[#6e6e6e] text-lg">Business Dashboard</p>
         </div>
