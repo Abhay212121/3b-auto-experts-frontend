@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import { baseUrl } from "../constant";
 
@@ -84,37 +83,6 @@ const NewProduct = () => {
                     </p>
                   )}
                 </div>
-
-                {/* <div className="space-y-1">
-                  <label
-                    htmlFor="productCategory"
-                    className="text-sm font-medium"
-                  >
-                    Product Category
-                  </label>
-                  <input
-                    id="productCategory"
-                    type="productCategory"
-                    placeholder="Enter product Category"
-                    {...register("productCategory", {
-                      required: "Category is required",
-                      pattern: {
-                        value: /^[a-zA-Z0-9 @#]+$/,
-                        message: "Special Character Not allowed",
-                      },
-                    })}
-                    className={`w-full px-3 py-2 border rounded-md ${
-                      errors.productCategory
-                        ? "border-red-500"
-                        : "border-gray-300"
-                    }`}
-                  />
-                  {errors.productCategory && (
-                    <p className="text-sm text-red-600">
-                      {errors.productCategory.message}
-                    </p>
-                  )}
-                </div> */}
 
                 <div className="space-y-1">
                   <label
