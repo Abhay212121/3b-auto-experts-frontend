@@ -34,7 +34,7 @@ const SalesForm = () => {
         data,
       });
       if (response.data.status == 200) {
-        alert("Done!");
+        alert("Record added!");
       }
     } catch (error) {
       console.error(error);
