@@ -35,6 +35,7 @@ const SalesForm = () => {
       });
       if (response.data.status == 200) {
         alert("Record added!");
+        reset();
       }
     } catch (error) {
       console.error(error);
@@ -387,7 +388,7 @@ const SalesForm = () => {
               disabled={productsNameArr.length === 0 || isLoading}
               className="w-full bg-[#EB1414] text-white py-2 rounded-md hover:bg-[#c11111] transition-colors"
             >
-              Record Sale
+              {isLoading ? "Processing..." : "Record Sale"}
             </button>
           </form>
         </div>
