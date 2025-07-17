@@ -1,40 +1,53 @@
 import { useEffect, useState } from "react";
 import Header from "./Header";
+import axios from "axios";
+import { baseUrl } from "../constant";
 
 const UserDashboard = ({ userName }) => {
-  const [sales, setSales] = useState([]);
-  const [purchases, setPurchases] = useState([]);
+  const [totalSales, setTotalSales] = useState(0);
+  const [receivedAmount, setReceivedAmount] = useState(0);
+  const [totalProfit, setTotalProfit] = useState(0);
+  const [profitPercentage, setProfitPercentage] = useState(0);
+  const [successfullTransactionsCount, setSuccessfullTransactionsCount] =
+    useState(0);
+  const [pendingTransactionsCount, setPendingTransactionsCount] = useState(0);
 
   useEffect(() => {
-    const salesData = JSON.parse(localStorage.getItem("salesData") || "[]");
-    const purchaseData = JSON.parse(
-      localStorage.getItem("purchaseData") || "[]"
-    );
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${baseUrl}/user/getData`, {
+          params: {
+            name: userName,
+          },
+        });
 
-    const userSales = salesData.filter(
-      (sale) => sale.soldByUser === userName.toLowerCase()
-    );
-    const userPurchases = purchaseData.filter(
-      (purchase) => purchase.purchasedByUser === userName.toLowerCase()
-    );
+        console.log("API Response:", response);
 
-    setSales(userSales);
-    setPurchases(userPurchases);
+        const data = response?.data?.data;
+        if (!data) {
+          console.warn("No data found in response:", response.data);
+          return;
+        }
+
+        setTotalSales(response.data.data.totalSum);
+        setTotalProfit(response.data.data.totalProfit);
+        setProfitPercentage(response.data.data.profitPercentage);
+        setSuccessfullTransactionsCount(
+          response.data.data.successfulTransactions
+        );
+        setReceivedAmount(response.data.data.receivedSum);
+
+        setPendingTransactionsCount(response.data.data.pendingTransactions);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    if (userName) {
+      fetchData();
+    }
   }, [userName]);
-
-  const totalSalesAmount = sales.reduce(
-    (sum, sale) => sum + parseFloat(sale.soldAtPrice || "0"),
-    0
-  );
-  const totalPurchaseAmount = purchases.reduce(
-    (sum, purchase) => sum + parseFloat(purchase.purchasePrice || "0"),
-    0
-  );
-  const profit = totalSalesAmount - totalPurchaseAmount;
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-IN");
-  };
 
   return (
     <>
@@ -49,18 +62,40 @@ const UserDashboard = ({ userName }) => {
           {[
             {
               label: "Total Sales",
-              value: `₹${totalSalesAmount.toLocaleString("en-IN")}`,
+              value: `₹${totalSales.toLocaleString("en-IN")}`,
             },
             {
-              label: "Total Purchases",
-              value: `₹${totalPurchaseAmount.toLocaleString("en-IN")}`,
+              label: "Completed Sales",
+              value: `₹${receivedAmount.toLocaleString("en-IN")}`,
+              className: "text-green-600",
             },
             {
-              label: "Profit/Loss",
-              value: `₹${profit.toLocaleString("en-IN")}`,
-              className: profit >= 0 ? "text-green-600" : "text-red-600",
+              label: "Pending Amount",
+              value: `₹${(receivedAmount - totalSales).toLocaleString(
+                "en-IN"
+              )}`,
+              className: "text-red-600",
             },
-            { label: "Items Sold", value: sales.length, color: "#EB1414" },
+            {
+              label: "Total Profit",
+              value: `₹${totalProfit.toLocaleString("en-IN")}`,
+              className: "text-green-600",
+            },
+            {
+              label: "Profit Percentage",
+              value: `${profitPercentage.toFixed(2)}%`,
+              className: "text-green-600",
+            },
+            {
+              label: "Successfull Transactions",
+              value: `${successfullTransactionsCount}`,
+              className: "text-green-600",
+            },
+            {
+              label: "Pending Transactions",
+              value: `${pendingTransactionsCount}`,
+              className: "text-red-600",
+            },
           ].map((item, i) => (
             <div
               key={i}
@@ -79,7 +114,7 @@ const UserDashboard = ({ userName }) => {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Sales Table */}
-          <div className="border rounded-lg shadow-sm bg-white">
+          {/* <div className="border rounded-lg shadow-sm bg-white">
             <h2 className="text-lg font-semibold text-[#EB1414] p-4 border-b">
               Recent Sales
             </h2>
@@ -127,10 +162,10 @@ const UserDashboard = ({ userName }) => {
                 </p>
               )}
             </div>
-          </div>
+          </div> */}
 
           {/* Purchases Table */}
-          <div className="border rounded-lg shadow-sm bg-white">
+          {/* <div className="border rounded-lg shadow-sm bg-white">
             <h2 className="text-lg font-semibold text-[#EB1414] p-4 border-b">
               Recent Purchases
             </h2>
@@ -170,7 +205,7 @@ const UserDashboard = ({ userName }) => {
                 </p>
               )}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

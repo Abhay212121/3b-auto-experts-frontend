@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { baseUrl } from "../constant";
-import { IndianRupee } from "lucide-react";
+import { Hash, IndianRupee } from "lucide-react";
 
 const SalesForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -198,6 +198,41 @@ const SalesForm = () => {
               )}
             </div>
 
+            {/* quantity */}
+            <div className="space-y-1">
+              <label
+                htmlFor="quantity"
+                className="block font-medium text-sm"
+              >
+                Quantity
+              </label>
+
+              <div className="flex items-center relative">
+                <Hash className="w-5 h-5 absolute left-2 text-gray-500" />
+                <input
+                  id="quantity"
+                  type="number"
+                  placeholder="Enter quantity"
+                  {...register("quantity", {
+                    required: "quantity is required",
+                    min: {
+                      value: 1,
+                      message: "Select quantity",
+                    },
+                  })}
+                  className={`w-full px-4 py-2 border rounded-md text-sm pl-8 bg-white focus:outline-none focus:ring-2 focus:ring-[#EB1414] focus:border-[#EB1414] ${
+                    errors.soldAtPrice ? "border-red-500" : "border-gray-300"
+                  }`}
+                />
+              </div>
+
+              {errors.quantity && (
+                <p className="text-sm text-red-600">
+                  {errors.quantity.message}
+                </p>
+              )}
+            </div>
+
             {/* Sold At Price (₹) */}
             <div className="space-y-1">
               <label
@@ -279,6 +314,39 @@ const SalesForm = () => {
               {errors.soldByUser && (
                 <p className="text-sm text-red-600">
                   {errors.soldByUser.message}
+                </p>
+              )}
+            </div>
+
+            {/* Sold to Customer */}
+            <div className="space-y-1">
+              <label
+                htmlFor="soldToCustomer"
+                className="block font-medium text-sm"
+              >
+                Sold to Customer
+              </label>
+
+              <input
+                id="soldToCustomer"
+                type="text"
+                placeholder="Enter the Customer name"
+                {...register("soldToCustomer", {
+                  required: "Customer name is required",
+                  pattern: {
+                    value: /^[a-zA-Z0-9 @#]+$/,
+                    message:
+                      "Only letters, numbers, spaces, @ and # are allowed",
+                  },
+                })}
+                className={`w-full px-4 py-2 border rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-[#EB1414] focus:border-[#EB1414] ${
+                  errors.soldToCustomer ? "border-red-500" : "border-gray-300"
+                }`}
+              />
+
+              {errors.soldToCustomer && (
+                <p className="text-sm text-red-600">
+                  {errors.soldToCustomer.message}
                 </p>
               )}
             </div>
